@@ -1,0 +1,9 @@
+[submodule "ms-nest-auth"]
+	path = ms-nest-auth
+	url = https://github.com/AbbalYouness/ms-nest-auth.git
+[submodule "ms-nest-gateway"]
+	path = ms-nest-gateway
+	url = https://github.com/AbbalYouness/ms-nest-gateway.git
+[submodule "ms-nest-user"]
+	path = ms-nest-user
+	url = https://github.com/AbbalYouness/ms-nest-user.git

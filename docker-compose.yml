@@ -1,0 +1,90 @@
+version: "3"
+services:
+  gateway:
+    build:
+      context: ./gateway
+      target: development
+    restart: always
+    command: npm run start:dev
+    ports:
+      - "$API_GATEWAY_PORT:$API_GATEWAY_PORT"
+    volumes:
+      - ./gateway:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - user
+      - auth
+      - rabbitmq
+    networks:
+      - backend_user
+
+  auth:
+    build:
+      context: ./auth
+      target: development
+    restart: always
+    command: npm run start:dev
+    volumes:
+      - ./auth:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - user
+      - rabbitmq
+    networks:
+      - backend_user
+
+  user:
+    build:
+      context: ./user
+      target: development
+    restart: always
+    command: npm run start:dev
+    volumes:
+      - ./user:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    networks:
+      - backend_user
+    depends_on:
+      - db_user
+      - rabbitmq
+    links:
+      - db_user
+
+  db_user:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_user
+    networks:
+      - backend_user
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend_user
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - /var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - 15672:15672
+    networks:
+      - backend_user
+
+networks:
+  backend_user:
