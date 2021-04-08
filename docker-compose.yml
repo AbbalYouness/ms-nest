@@ -1,15 +1,15 @@
 version: "3"
 services:
-  gateway:
+  ms-nest-gateway:
     build:
-      context: ./gateway
+      context: ./ms-nest-gateway
       target: development
     restart: always
     command: npm run start:dev
     ports:
       - "$API_GATEWAY_PORT:$API_GATEWAY_PORT"
     volumes:
-      - ./gateway:/usr/src/app
+      - ./ms-nest-gateway:/usr/src/app
       - /usr/src/app/node_modules
     env_file:
       - .env
@@ -20,14 +20,14 @@ services:
     networks:
       - backend_user
 
-  auth:
+  ms-nest-auth:
     build:
-      context: ./auth
+      context: ./ms-nest-auth
       target: development
     restart: always
     command: npm run start:dev
     volumes:
-      - ./auth:/usr/src/app
+      - ./ms-nest-auth:/usr/src/app
       - /usr/src/app/node_modules
     env_file:
       - .env
@@ -37,14 +37,14 @@ services:
     networks:
       - backend_user
 
-  user:
+  ms-nest-user:
     build:
-      context: ./user
+      context: ./ms-nest-user
       target: development
     restart: always
     command: npm run start:dev
     volumes:
-      - ./user:/usr/src/app
+      - ./ms-nest-user:/usr/src/app
       - /usr/src/app/node_modules
     env_file:
       - .env
